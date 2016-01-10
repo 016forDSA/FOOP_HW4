@@ -1,30 +1,23 @@
-import foop.Card;
+import foop.*;
 import java.util.*;
 import java.lang.reflect.Constructor;
 
 public class POOCasino{
-   private static String className = "Card";
    
-   private static String player[] = new String[4];
-
    public static void main(String args[]){
-      // Construct or something else
+      // Take in Input, format : nRound, nChip, PlayerClassName1, 2, 3, 4
       int nRound = Integer.parseInt(args[0]);
       int nChip = Integer.parseInt(args[1]);
-      String[] player = {args[2], args[3], args[4], args[5]};
+      String[] playerClassName = {args[2], args[3], args[4], args[5]};
       
-      System.out.println(nRound);
-      System.out.println(nChip);
-      System.out.println(player[0]); 
-      System.out.println(player[1]);
-      System.out.println(player[2]); 
-      System.out.println(player[3]);
-      CasinoChain chain = CasinoChain.Init();
+      // Init CasinoChain With Player(State Pattern)
+      CasinoChain chain = CasinoChain.InitWithPlayer(playerClassName, nChip);
+
       try{
-         System.out.println("Start");
-         // while(true){
+         while( nRound-- > 0){
+            chain.set_state(new Init());
             chain.pull();
-         // }
+         }
       } catch (Exception e){
          System.out.println(e.getMessage());
       }

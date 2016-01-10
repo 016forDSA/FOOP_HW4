@@ -1,13 +1,37 @@
+import java.lang.reflect.Constructor;
+
 class CasinoChain{
 
    private State m_current_state;
+   private String[] playerClassName;
+   private Object[] player = new Object[4];
+
+   private CasinoChain(){
+      m_current_state = new Init();
+   }
+
+   private CasinoChain(String[] playerClassName, int nChip){
+      m_current_state = new Init();
+      for(int i = 0; i < 4; i++){
+         try{
+            Class tmp = Class.forName(playerClassName[i]);
+            // System.out.println("Get Class");
+            Constructor constructor = tmp.getConstructor(Integer.TYPE);
+            // System.out.println("Get Constructor");
+            player[i] = constructor.newInstance(nChip);
+            // System.out.println("New Instance");
+         } catch (Exception e){
+            System.out.println(e.getCause());
+         }
+      }
+   }
 
    public static CasinoChain Init(){
       return new CasinoChain();
    }
-
-   private CasinoChain(){
-      m_current_state = new Init();
+   
+   public static CasinoChain InitWithPlayer(String[] playerClassName, int nChip){
+      return new CasinoChain(playerClassName, nChip);
    }
 
    public void set_state(State s){
